@@ -13,13 +13,16 @@ import org.testng.annotations.Test;
 public class Topic_01_Check_Environment {
 	WebDriver driver;
 	String projectPath = System.getProperty("user.dir");
+	String osName = System.getProperty("os.name");
 
 	@BeforeClass
 	public void beforeClass() {
-//mac
-		System.setProperty("webdriver.gecko.driver", projectPath + "/browserDrivers/geckodriver");
-//windown
-//		System.setProperty("webdriver.gecko.driver", projectPath + "\\browserDrivers\\geckodriver.exe");
+		if (osName.contains("Windows")) {
+			System.setProperty("webdriver.gecko.driver", projectPath + "\\browserDrivers\\geckodriver.exe");
+		} else {
+			System.setProperty("webdriver.gecko.driver", projectPath + "/browserDrivers/geckodriver");
+		}
+
 		driver = new FirefoxDriver();
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
@@ -31,6 +34,7 @@ public class Topic_01_Check_Environment {
 		// Login Page Url matching
 		String loginPageUrl = driver.getCurrentUrl();
 		Assert.assertEquals(loginPageUrl, "https://www.facebook.com/");
+
 	}
 
 	@Test
@@ -48,6 +52,6 @@ public class Topic_01_Check_Environment {
 
 	@AfterClass
 	public void afterClass() {
-		// driver.quit();
+		driver.quit();
 	}
 }
